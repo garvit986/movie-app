@@ -1,54 +1,36 @@
-import React, { useState, FC, FormEvent } from "react";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Box, TextField, Button, Grid, Typography } from "@mui/material";
 import { User } from "../interfaces/Types";
 import { registerUser } from "../utils/LocalForage";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 
-const Register: FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+type FormValues = {
+  username: string;
+  password: string;
+  name: string;
+  email: string;
+};
+
+const Register: React.FC = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState("");
 
-  const validate = (): boolean => {
-    const errors: { [key: string]: string } = {};
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!username) errors.username = "Username is required";
-    if (!password) errors.password = "Password is required";
-    if (!name) errors.name = "Name is required";
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!emailPattern.test(email)) {
-      errors.email = "Email is not valid";
-    }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: FormValues) => {
     setLoading(true);
     setMessage("");
-
-    if (!validate()) {
-      setLoading(false);
-      return;
-    }
 
     try {
       const user: User = {
         id: 0,
-        username,
-        password,
-        name,
-        email,
+        ...data,
       };
       await registerUser(user);
       setTimeout(() => {
@@ -68,7 +50,7 @@ const Register: FC = () => {
       ) : (
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           sx={{
             width: "100%",
             maxWidth: 600,
@@ -87,49 +69,87 @@ const Register: FC = () => {
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="outlined-username"
-                label="Username"
-                onChange={(e) => setUsername(e.target.value)}
-                error={!!errors.username}
-                helperText={errors.username}
+              <Controller
+                name="username"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Username is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    id="outlined-username"
+                    label="Username"
+                    error={!!errors.username}
+                    helperText={errors.username?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="outlined-password"
-                label="Password"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                error={!!errors.password}
-                helperText={errors.password}
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Password is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    id="outlined-password"
+                    label="Password"
+                    type="password"
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="outlined-name"
-                label="Name"
-                onChange={(e) => setName(e.target.value)}
-                error={!!errors.name}
-                helperText={errors.name}
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Name is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    id="outlined-name"
+                    label="Name"
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="outlined-email"
-                label="Email"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                error={!!errors.email}
-                helperText={errors.email}
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Email is not valid",
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    id="outlined-email"
+                    label="Email"
+                    type="email"
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} textAlign="center">

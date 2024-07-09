@@ -14,6 +14,7 @@ import {
   Typography,
   Button,
   Box,
+  CardActionArea
 } from "@mui/material";
 import { RootState } from "../redux/store";
 import { useNavigate } from "react-router-dom";
@@ -58,43 +59,36 @@ const DisplayFavorites: React.FC = () => {
       {favoriteMovies.map((movie) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={movie.imdbID}>
           <Card sx={{ maxWidth: 345, mx: "auto" }}>
-            <CardMedia
-              component="img"
-              alt={movie.imdbID}
-              height="500"
-              image={movie.Poster}
-            />
-            <CardContent>
-              <Typography variant="h5" component="div">
-                {movie.Title}
-              </Typography>
-              <List>
-                {movie.Ratings.map((rating, index) => (
-                  <ListItem key={index}>
-                    <ListItemText
-                      primary={`${rating.Source}: ${rating.Value}`}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-              <Box sx={{ mt: 2 }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleDetailsClick(movie.imdbID)}
-                  sx={{ mr: 2 }}
-                >
-                  Movie Details
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => handleRemove(movie.imdbID)}
-                >
-                  Remove Favourites
-                </Button>
-              </Box>
-            </CardContent>
+            <CardActionArea onClick={() => handleDetailsClick(movie.imdbID)}>
+              <CardMedia
+                component="img"
+                alt={movie.imdbID}
+                height="500"
+                image={movie.Poster}
+              />
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {movie.Title}
+                </Typography>
+                <List>
+                  {movie.Ratings.map((rating, index) => (
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary={`${rating.Source}: ${rating.Value}`}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </CardContent>
+            </CardActionArea>
+            <Box sx={{ mt: 2 }}>
+ <Button
+    variant="contained"
+    color="secondary"
+    onClick={() => handleRemove(movie.imdbID)}>
+    Remove Favourites
+  </Button>
+</Box>
           </Card>
         </Grid>
       ))}

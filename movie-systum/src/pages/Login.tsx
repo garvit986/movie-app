@@ -1,4 +1,5 @@
-import React, { useState, FC, FormEvent } from "react";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Box, TextField, Button, Grid, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
@@ -6,20 +7,22 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../utils/LocalForage";
 import { login } from "../redux/userSlice";
 
-const Login: FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const [error, setError] = useState("");
+type FormValues = {
+  username: string;
+  password: string;
+};
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+const Login: React.FC = () => {
+  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+
+  const onSubmit = async (data: FormValues) => {
     try {
       setLoading(true);
-      const user = await loginUser(username, password);
+      const user = await loginUser(data.username, data.password);
       setLoading(false);
       if (user) {
         // Login successful, navigate to home or profile page
@@ -44,7 +47,7 @@ const Login: FC = () => {
       ) : (
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           sx={{
             width: "100%",
             maxWidth: 400,
@@ -63,22 +66,42 @@ const Login: FC = () => {
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="outlined-required"
-                label="Username"
-                onChange={(e) => setUsername(e.target.value)}
+              <Controller
+                name="username"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Username is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    id="outlined-username"
+                    label="Username"
+                    error={!!errors.username}
+                    helperText={errors.username?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Password is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    id="outlined-password"
+                    label="Password"
+                    type="password"
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} textAlign="center">
@@ -87,9 +110,9 @@ const Login: FC = () => {
               </Button>
             </Grid>
           </Grid>
-          {message && (
+          {error && (
             <Typography color="error" align="center" sx={{ mt: 2 }}>
-              {message}
+              {error}
             </Typography>
           )}
         </Box>
