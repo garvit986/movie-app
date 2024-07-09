@@ -1,11 +1,5 @@
 import React, { useState, FC, FormEvent } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, TextField, Button, Grid, Typography } from "@mui/material";
 import { User } from "../interfaces/Types";
 import { registerUser } from "../utils/LocalForage";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +52,7 @@ const Register: FC = () => {
       };
       await registerUser(user);
       setTimeout(() => {
-        setLoading(false); // Hide loader after 2 seconds
+        setLoading(false);
         navigate("/login");
       }, 2000);
     } catch (error: any) {

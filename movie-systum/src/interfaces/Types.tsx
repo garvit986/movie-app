@@ -1,11 +1,11 @@
 export interface User {
-    id: number;
-    username: string;
-    password: string;
-    name: string;
-    email: string,
-    favorites?: string[]
-  }
+  id: number;
+  username: string;
+  password: string;
+  name: string;
+  email: string;
+  favorites?: string[];
+}
 
 export interface Movie {
   Title: string;
@@ -33,7 +33,19 @@ export interface Movie {
   Production: string;
   Website: string;
   Response: string;
-  Comments?: {user: User; comment: string}[];
+  Comments?: { user: User; comment: string }[];
 }
 
-  
+export interface Comment {
+  id: string;
+  imdbID: string;
+  username: string;
+  text: string;
+  date: string;
+}
+
+export interface MovieState {
+  movies: Movie[];
+  loading: boolean;
+  error: string | null;
+}

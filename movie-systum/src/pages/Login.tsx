@@ -1,11 +1,10 @@
-import React, { useState, FC, useContext, FormEvent } from "react";
+import React, { useState, FC, FormEvent } from "react";
 import { Box, TextField, Button, Grid, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../utils/LocalForage";
-import {login} from '../redux/userSlice'
-import { User } from "../interfaces/Types";
+import { login } from "../redux/userSlice";
 
 const Login: FC = () => {
   const [username, setUsername] = useState("");
@@ -13,36 +12,36 @@ const Login: FC = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch()
-  const [error, setError] = useState("")
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e:FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     try {
       setLoading(true);
       const user = await loginUser(username, password);
       setLoading(false);
       if (user) {
         // Login successful, navigate to home or profile page
-        console.log('Login successful:', user);
+        console.log("Login successful:", user);
         // Dispatch login action to Redux store
         dispatch(login(user));
         navigate("/movies");
       } else {
-        setError('Invalid username or password');
+        setError("Invalid username or password");
       }
     } catch (error) {
       setLoading(false);
-      setError('Failed to login');
-      console.error('Login error:', error);
+      setError("Failed to login");
+      console.error("Login error:", error);
     }
   };
 
   return (
     <>
-    { loading?
-        (<Loading />)
-       : (
+      {loading ? (
+        <Loading />
+      ) : (
         <Box
           component="form"
           onSubmit={handleSubmit}
