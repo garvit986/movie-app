@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, List, ListItem, ListItemButton, ListItemText, Paper } from '@mui/material';
+import { Box } from "@mui/material";
+import { ListItemButton } from "@mui/material";
+import { TextField } from "@mui/material";
+import { Button } from "@mui/material";
+import { List } from "@mui/material";
+import { Paper } from "@mui/material"
+import { ListItem } from "@mui/material";
+import { ListItemText } from "@mui/material";
 import { SearchBarProps } from '../interfaces/Types';
 
 const Search: React.FC<SearchBarProps> = ({ onSearch, suggestions }) => {
@@ -8,15 +15,21 @@ const Search: React.FC<SearchBarProps> = ({ onSearch, suggestions }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
-    if (searchTerm) {
-      const filtered = suggestions.filter((suggestion) =>
-        suggestion.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
-    }
+    const timerId = setTimeout(() => {
+        if (searchTerm) {
+          const filtered = suggestions.filter((suggestion) =>
+            suggestion.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          setFilteredSuggestions(filtered);
+          setShowSuggestions(true);
+        } else {
+          setShowSuggestions(false);
+        }
+      }, 500);
+
+      return () =>{
+        clearTimeout(timerId)
+      }
   }, [searchTerm, suggestions]);
 
   const handleSearch = () => {
@@ -37,9 +50,9 @@ const Search: React.FC<SearchBarProps> = ({ onSearch, suggestions }) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         fullWidth
-        sx={{ flexGrow: 1, mb: 1 }}
+        sx={{ flexGrow: 1, mb: 1}}
       />
-      <Button variant="contained" color="primary" onClick={handleSearch} sx={{ ml: 2, mb: 1 }}>
+      <Button variant="contained" color="primary" onClick={handleSearch} sx={{ ml: 2, mb: 1, p: 2 }}>
         Search
       </Button>
       {showSuggestions && (
@@ -60,3 +73,9 @@ const Search: React.FC<SearchBarProps> = ({ onSearch, suggestions }) => {
 };
 
 export default Search;
+
+
+// UI
+// local forage me store userdata
+// Comments
+// Endpoints

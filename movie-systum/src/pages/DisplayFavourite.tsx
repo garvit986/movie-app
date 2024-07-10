@@ -3,19 +3,17 @@ import { Movie } from "../interfaces/Types";
 import { getFavoriteMovies, removeFavoriteMovie } from "../utils/LocalForage";
 import moviesData from "../movies.json";
 import { useSelector } from "react-redux";
-import {
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  Button,
-  Box,
-  CardActionArea,
-} from "@mui/material";
+import { Box } from "@mui/material";
+import { Card } from "@mui/material";
+import { CardContent } from "@mui/material";
+import { CardMedia } from "@mui/material";
+import { CardActionArea } from "@mui/material";
+import { Button } from "@mui/material";
+import { Typography } from "@mui/material";
+import { List } from "@mui/material";
+import { ListItem } from "@mui/material";
+import { Grid } from "@mui/material";
+import { ListItemText } from "@mui/material";
 import { RootState } from "../redux/store";
 import { useNavigate } from "react-router-dom";
 
