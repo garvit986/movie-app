@@ -1,17 +1,15 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Box, TextField, Button, Grid, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import { User } from "../interfaces/Types";
 import { registerUser } from "../utils/LocalForage";
+import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
-
-type FormValues = {
-  username: string;
-  password: string;
-  name: string;
-  email: string;
-};
+import { FormValues } from "../interfaces/Types";
 
 const Register: React.FC = () => {
   const {

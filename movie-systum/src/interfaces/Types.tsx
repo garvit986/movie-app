@@ -4,7 +4,7 @@ export interface User {
   password: string;
   name: string;
   email: string;
-  favorites?: string[];
+  favorites: string[];
 }
 
 export interface Movie {
@@ -34,6 +34,7 @@ export interface Movie {
   Website: string;
   Response: string;
   Comments?: { user: User; comment: string }[];
+  Rating? : number
 }
 
 export interface Comment {
@@ -42,6 +43,7 @@ export interface Comment {
   username: string;
   text: string;
   date: string;
+  rating: number;
 }
 
 export interface MovieState {
@@ -49,3 +51,16 @@ export interface MovieState {
   loading: boolean;
   error: string | null;
 }
+
+export interface SearchBarProps {
+  onSearch: (searchTerm: string) => void;
+  suggestions: string[];
+}
+
+export interface FormValues  {
+  username: string;
+  password: string;
+  name: string;
+  email: string;
+  favorites: string[];
+};

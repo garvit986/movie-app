@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Box, TextField, Button, Grid, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import Loading from "../components/Loading";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../utils/LocalForage";
 import { login } from "../redux/userSlice";
+
+// use yup for Form Validation
 
 type FormValues = {
   username: string;
@@ -16,8 +18,8 @@ const Login: React.FC = () => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -41,6 +43,7 @@ const Login: React.FC = () => {
   };
 
   return (
+    // create a common component
     <>
       {loading ? (
         <Loading />

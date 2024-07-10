@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Typography,
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { Card } from "@mui/material";
+import { CardContent } from "@mui/material";
+import { CardMedia } from "@mui/material";
+import { TextField } from "@mui/material";
+import { Button } from "@mui/material";
+import { List } from "@mui/material";
+import { ListItem } from "@mui/material";
+import { ListItemText } from "@mui/material";
+import { Rating } from "@mui/material";
 import moviesData from "../movies.json";
 import { Movie, Comment } from "../interfaces/Types";
 import { addComment, getComments } from "../utils/LocalForage";
@@ -23,6 +22,7 @@ const MovieDetails: React.FC = () => {
   const [movie, setMovie] = useState<Movie>();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [newRating, setNewRating] = useState<number>(0);
   const username = useSelector(
     (state: RootState) => state.user.currentUser.username
   );
@@ -45,10 +45,11 @@ const MovieDetails: React.FC = () => {
 
   const handleAddComment = async () => {
     if (id && newComment && username) {
-      await addComment(username, id, newComment);
+      await addComment(username, id, newComment, newRating);
       const updatedComments = await getComments(id);
       setComments(updatedComments);
       setNewComment("");
+      setNewRating(0);
     }
   };
 
@@ -93,18 +94,7 @@ const MovieDetails: React.FC = () => {
             </Typography>
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6">Comments</Typography>
-              <List>
-                {comments.map((comment) => (
-                  <ListItem key={comment.id} sx={{ mt: 1 }}>
-                    <ListItemText
-                      primary={comment.text}
-                      secondary={`By ${comment.username} on ${new Date(
-                        comment.date
-                      ).toLocaleString()}`}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+              
               <TextField
                 label="Add a comment"
                 value={newComment}
@@ -114,14 +104,31 @@ const MovieDetails: React.FC = () => {
                 rows={4}
                 sx={{ mt: 2 }}
               />
+              <Rating
+                value={newRating}
+                onChange={(e, newValue) => setNewRating(newValue || 0)}
+                sx={{ mt: 2 }}
+              />
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleAddComment}
-                sx={{ mt: 1 }}
+                sx={{ mt: 2 }} // Adjusted spacing
               >
                 Submit
               </Button>
+              <List>
+                {comments.map((comment) => (
+                  <ListItem key={comment.id} sx={{ mt: 1 }}>
+                    <ListItemText
+                      primary={`${comment.text} (Rating: ${comment.rating})`}
+                      secondary={`By ${comment.username} on ${new Date(
+                        comment.date
+                      ).toLocaleString()}`}
+                    />
+                  </ListItem>
+                ))}
+              </List>
             </Box>
           </CardContent>
         </Box>

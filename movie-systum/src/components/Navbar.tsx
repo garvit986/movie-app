@@ -1,4 +1,5 @@
 import React from "react";
+// make a different import for each @mui-material
 import {
   AppBar,
   Toolbar,
@@ -23,17 +24,14 @@ const Navbar: React.FC = () => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -48,78 +46,83 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography
-          variant="h6"
-          sx={{ flexGrow: 1, cursor: "pointer" }}
-          onClick={() => navigate("/")}
-        >
-          Movie App
-        </Typography>
-        {isMobile ? (
-          <>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={handleMenu}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography
+            variant="h6"
+            sx={{ flexGrow: 1, cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          >
+            Movie App
+          </Typography>
+          {isMobile ? (
+            <>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleMenu}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {isLoggedIn ? (
+                  <>
+                    <MenuItem onClick={() => handleNavigate("/favorites")}>
+                      Favourites
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem onClick={() => handleNavigate("/login")}>
+                      Login
+                    </MenuItem>
+                    <MenuItem onClick={() => handleNavigate("/register")}>
+                      Register
+                    </MenuItem>
+                  </>
+                )}
+              </Menu>
+            </>
+          ) : (
+            <>
               {isLoggedIn ? (
                 <>
-                  <MenuItem onClick={() => handleNavigate("/favorites")}>
+                  <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                    Welcome, {currentUser?.username}
+                  </Typography>
+                  <Button
+                    color="inherit"
+                    onClick={() => navigate("/favorites")}
+                  >
                     Favourites
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </Button>
+                  <Button color="inherit" onClick={handleLogout}>
+                    Logout
+                  </Button>
                 </>
               ) : (
                 <>
-                  <MenuItem onClick={() => handleNavigate("/login")}>
+                  <Button color="inherit" onClick={() => navigate("/login")}>
                     Login
-                  </MenuItem>
-                  <MenuItem onClick={() => handleNavigate("/register")}>
+                  </Button>
+                  <Button color="inherit" onClick={() => navigate("/register")}>
                     Register
-                  </MenuItem>
+                  </Button>
                 </>
               )}
-            </Menu>
-          </>
-        ) : (
-          <>
-            {isLoggedIn ? (
-              <>
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                  Welcome, {currentUser?.username}
-                </Typography>
-                <Button color="inherit" onClick={() => navigate("/favorites")}>
-                  Favourites
-                </Button>
-                <Button color="inherit" onClick={handleLogout}>
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button color="inherit" onClick={() => navigate("/login")}>
-                  Login
-                </Button>
-                <Button color="inherit" onClick={() => navigate("/register")}>
-                  Register
-                </Button>
-              </>
-            )}
-          </>
-        )}
-      </Toolbar>
-    </AppBar>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+    </>
   );
 };
 
