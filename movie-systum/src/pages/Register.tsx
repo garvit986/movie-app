@@ -50,11 +50,11 @@ const Register: React.FC = () => {
           component="form"
           onSubmit={handleSubmit(onSubmit)}
           sx={{
-            width: "100%",
+            width: "92%",
             maxWidth: 600,
             mx: "auto",
             p: 2,
-            mt: 4,
+            mt: 18,
             boxShadow: 3,
             borderRadius: 2,
             bgcolor: "background.paper",

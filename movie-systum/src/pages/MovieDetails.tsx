@@ -59,13 +59,19 @@ const MovieDetails: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Card sx={{ display: "flex", maxWidth: 800, mx: "auto" }}>
+      <Card
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          maxWidth: 800,
+          mx: "auto",
+        }}
+      >
         <CardMedia
           component="img"
           alt={movie.Title}
-          height="500"
           image={movie.Poster}
-          sx={{ maxWidth: 300 }}
+          sx={{ maxWidth: { xs: "100%", md: 300 }, height: "auto" }}
         />
         <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
           <CardContent sx={{ flex: 1 }}>
@@ -94,7 +100,6 @@ const MovieDetails: React.FC = () => {
             </Typography>
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6">Comments</Typography>
-              
               <TextField
                 label="Add a comment"
                 value={newComment}
@@ -104,19 +109,20 @@ const MovieDetails: React.FC = () => {
                 rows={4}
                 sx={{ mt: 2 }}
               />
-              <Rating
-                value={newRating}
-                onChange={(e, newValue) => setNewRating(newValue || 0)}
-                sx={{ mt: 2 }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddComment}
-                sx={{ mt: 2 }} // Adjusted spacing
-              >
-                Submit
-              </Button>
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                <Rating
+                  value={newRating}
+                  onChange={(e, newValue) => setNewRating(newValue || 0)}
+                  sx={{ mr: 2 }}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddComment}
+                >
+                  Submit
+                </Button>
+              </Box>
               <List>
                 {comments.map((comment) => (
                   <ListItem key={comment.id} sx={{ mt: 1 }}>

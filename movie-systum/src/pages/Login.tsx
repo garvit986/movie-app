@@ -11,13 +11,7 @@ import Loading from "../components/Loading";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../utils/LocalForage";
 import { login } from "../redux/userSlice";
-
-// use yup for Form Validation
-
-type FormValues = {
-  username: string;
-  password: string;
-};
+import { FormValues } from "../interfaces/Types";
 
 const Login: React.FC = () => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormValues>();
@@ -48,7 +42,6 @@ const Login: React.FC = () => {
   };
 
   return (
-    // create a common component
     <>
       {loading ? (
         <Loading />
@@ -57,11 +50,11 @@ const Login: React.FC = () => {
           component="form"
           onSubmit={handleSubmit(onSubmit)}
           sx={{
-            width: "100%",
+            width: "92%",
             maxWidth: 400,
             mx: "auto",
             p: 2,
-            mt: 4,
+            mt: 18,
             boxShadow: 3,
             borderRadius: 2,
             bgcolor: "background.paper",
